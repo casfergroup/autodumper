@@ -1,0 +1,25 @@
+services:
+  mariadb:
+    image: mariadb:lts
+    restart: always
+    environment:
+      MYSQL_ROOT_PASSWORD: rootpass
+      MYSQL_DATABASE: testdb
+      MYSQL_USER: testuser
+      MYSQL_PASSWORD: testpass
+    ports:
+      - "3306:3306"
+      
+  bk:
+    image: casfergroup/autodumper:latest
+    environment:
+      DB_HOST: mariadb
+      DB_USER: root
+      DB_PASSWORD: rootpass
+      DB_NAME: ""
+      DB_TYPE: mariadb
+      S3_REMOTE: your_remote
+      S3_PATH: "/your/path"
+      DUMP_PREFIX: "all_db"
+    volumes:
+      - ~/.config/rclone/rclone.conf:/root/.config/rclone/rclone.conf:ro
