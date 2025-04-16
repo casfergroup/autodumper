@@ -1,12 +1,12 @@
 FROM ubuntu:24.04
 
-ENV DB_HOST=db.example.com
-ENV DB_USER=root
-ENV DB_PASSWORD=secret
+ENV DB_HOST=""
+ENV DB_USER=""
+ENV DB_PASSWORD=""
 ENV DB_NAME=""
-ENV DB_TYPE=mysql
-ENV S3_REMOTE=myremote
-ENV S3_PATH=backups
+ENV DB_TYPE=""
+ENV S3_REMOTE=""
+ENV S3_PATH=""
 ENV DUMP_PREFIX=""
 
 # Install dependencies
