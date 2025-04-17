@@ -12,6 +12,7 @@ Run
 ```
 docker run --rm \
   -e DB_HOST=mysql \
+  -e DB_PORT=3306 \
   -e DB_USER=testuser \
   -e DB_PASSWORD=testpass \
   -e DB_NAME=testdb \

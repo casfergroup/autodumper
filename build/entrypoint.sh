@@ -11,33 +11,33 @@ dump_databases() {
         mysql)
             if [[ -z "$DB_NAME" ]]; then
                 echo "Dumping all MySQL databases..."
-                mysqldump -h "$DB_HOST" -u "$DB_USER" -p"$DB_PASSWORD" --all-databases | gzip > "$DUMP_PATH"
+                mysqldump -h "$DB_HOST" -P "$DB_PORT" -u "$DB_USER" -p"$DB_PASSWORD" --all-databases | gzip > "$DUMP_PATH"
             else
                 echo "Dumping selected MySQL databases: $DB_NAME"
                 IFS=',' read -ra DBS <<< "$DB_NAME"
-                mysqldump -h "$DB_HOST" -u "$DB_USER" -p"$DB_PASSWORD" --databases "${DBS[@]}" | gzip > "$DUMP_PATH"
+                mysqldump -h "$DB_HOST" -P "$DB_PORT" -u "$DB_USER" -p"$DB_PASSWORD" --databases "${DBS[@]}" | gzip > "$DUMP_PATH"
             fi
             ;;
         mariadb)
             if [[ -z "$DB_NAME" ]]; then
-                echo "Dumping all MySQL databases..."
-                mariadb-dump -h "$DB_HOST" -u "$DB_USER" -p"$DB_PASSWORD" --all-databases | gzip > "$DUMP_PATH"
+                echo "Dumping all MariaDB databases..."
+                mariadb-dump -h "$DB_HOST" -P "$DB_PORT" -u "$DB_USER" -p"$DB_PASSWORD" --all-databases | gzip > "$DUMP_PATH"
             else
-                echo "Dumping selected MySQL databases: $DB_NAME"
+                echo "Dumping selected MariaDB databases: $DB_NAME"
                 IFS=',' read -ra DBS <<< "$DB_NAME"
-                mariadb-dump -h "$DB_HOST" -u "$DB_USER" -p"$DB_PASSWORD" --databases "${DBS[@]}" | gzip > "$DUMP_PATH"
+                mariadb-dump -h "$DB_HOST" -P "$DB_PORT" -u "$DB_USER" -p"$DB_PASSWORD" --databases "${DBS[@]}" | gzip > "$DUMP_PATH"
             fi
             ;;
         postgresql)
             export PGPASSWORD="$DB_PASSWORD"
             if [[ -z "$DB_NAME" ]]; then
                 echo "Dumping all PostgreSQL databases..."
-                pg_dumpall -h "$DB_HOST" -U "$PG_USER" | gzip > "$DUMP_PATH"
+                pg_dumpall -h "$DB_HOST" -p "$DB_PORT" -U "$PG_USER" | gzip > "$DUMP_PATH"
             else
                 echo "Dumping selected PostgreSQL databases: $DB_NAME"
                 IFS=',' read -ra DBS <<< "$DB_NAME"
                 for db in "${DBS[@]}"; do
-                    pg_dump -h "$DB_HOST" -U "$PG_USER" "$db" | gzip >> "$DUMP_PATH"
+                    pg_dump -h "$DB_HOST" -p "$DB_PORT" -U "$PG_USER" "$db" | gzip >> "$DUMP_PATH"
                 done
             fi
             ;;
