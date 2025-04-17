@@ -2,7 +2,7 @@
 
 # === Internal variables ===
 DATE_STR=$(date +"%Y-%m-%d_%H-%M-%S")
-FILENAME="${DUMP_PREFIX}${DATE_STR}.sql.gz"
+FILENAME="${DUMP_PREFIX}-${DATE_STR}.sql.gz"
 DUMP_PATH="/data/${FILENAME}"
 
 # === Function to dump database(s) ===
@@ -54,7 +54,7 @@ upload_with_retries() {
     local max_attempts=3
 
     while (( attempt <= max_attempts )); do
-        echo "Attempt $attempt to upload backup via rclone..."
+        echo "Attempt $attempt to upload $FILENAME to $S3_REMOTE:$S3_PATH via rclone..."
         if rclone copy "$DUMP_PATH" "$S3_REMOTE:$S3_PATH"; then
             echo "Upload successful."
             return 0
@@ -75,6 +75,6 @@ if upload_with_retries; then
     echo "Cleaning up local backup..."
     rm -f "$DUMP_PATH"
 else
-    echo "Backup upload failed after retries. File kept at: $DUMP_PATH"
+    echo "Backup upload failed after 3 retries. File kept at: $DUMP_PATH"
     exit 1
 fi
