@@ -2,7 +2,7 @@
 
 # === Internal variables ===
 DATE_STR=$(date +"%Y-%m-%d_%H-%M-%S")
-FILENAME="${DUMP_PREFIX}${DATE_STR}.sql.gz"
+FILENAME="${DUMP_PREFIX}-${DATE_STR}.sql.gz"
 DUMP_PATH="/data/${FILENAME}"
 
 # === Function to dump database(s) ===
