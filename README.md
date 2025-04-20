@@ -15,7 +15,7 @@ docker run --rm \
   -e DB_PORT=3306 \
   -e DB_USER=testuser \
   -e DB_PASSWORD=testpass \
-  -e DB_NAME=testdb \
+  -e DB_NAME="testdb1 testdb2" \
   -e DB_TYPE=mysql \
   -e S3_REMOTE=myremote \
   -e S3_PATH=mybucket/backups \
