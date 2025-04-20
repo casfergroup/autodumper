@@ -1,4 +1,4 @@
-FROM ubuntu:24.04
+FROM alpine:latest
 
 ENV DB_HOST="db"
 ENV DB_PORT="3306"
@@ -11,16 +11,14 @@ ENV S3_PATH=""
 ENV DUMP_PREFIX=""
 
 # Install dependencies
-RUN apt update && \
-    apt upgrade -y && \
-    apt install -y \
+RUN apk update && \
+    apk upgrade --available && \
+    apk add --no-cache \
         ca-certificates \
         mariadb-client \
         postgresql-client \
         gzip \
-        rclone && \
-    apt clean && \
-    rm -rf /var/lib/apt/lists/*
+        rclone
 
 WORKDIR /data
 
