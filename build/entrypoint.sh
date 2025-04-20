@@ -7,7 +7,7 @@ umask 077
 required_vars="DB_HOST DB_USER DB_PASSWORD DB_TYPE S3_REMOTE S3_PATH"
 for var in $required_vars; do
     eval "value=\${$var}"
-    if [ -z "$valie" ]; then
+    if [ -z "$value" ]; then
         echo "Error: Required variable $var is not set!"
         exit 1
     fi
