@@ -1,4 +1,4 @@
-#!/bin/bash
+#!/bin/sh
 
 # === Internal variables ===
 DATE_STR=$(date +"%Y-%m-%d_%H-%M-%S")
