@@ -1,9 +1,24 @@
 #!/bin/sh
 
+# === File Permssions ==
+umask 077
+
+# == ENV Validation ==
+required_vars="DB_HOST DB_USER DB_PASSWORD DB_TYPE S3_REMOTE S3_PATH"
+for var in $required_vars; do
+    eval "value=\${$var}"
+    if [ -z "$valie" ]; then
+        echo "Error: Required variable $var is not set!"
+        exit 1
+    fi
+done
+
 # === Internal variables ===
 DATE_STR=$(date +"%Y-%m-%d_%H-%M-%S")
 FILENAME="${DUMP_PREFIX}_${DATE_STR}.sql.gz"
 DUMP_PATH="/data/${FILENAME}"
+
+# == Function to split 
 
 # === Function to dump database(s) ===
 dump_databases() {
@@ -11,25 +26,19 @@ dump_databases() {
         mysql)
             if [ -z "$DB_NAME" ]; then
                 echo "Dumping all MySQL databases..."
-                mysqldump -h "$DB_HOST" -P "$DB_PORT" -u "$DB_USER" -p"$DB_PASSWORD" --all-databases | gzip > "$DUMP_PATH"
+                mysqldump -h "$DB_HOST" -P "$DB_PORT" -u "$DB_USER" -p$DB_PASSWORD --all-databases | gzip > "$DUMP_PATH"
             else
                 echo "Dumping selected MySQL databases: $DB_NAME"
-                IFS=',' read -r DBS <<< "$DB_NAME"
-                for db in $DBS; do
-                    mysqldump -h "$DB_HOST" -P "$DB_PORT" -u "$DB_USER" -p"$DB_PASSWORD" "$db" | gzip >> "$DUMP_PATH"
-                done
+                mysqldump -h "$DB_HOST" -P "$DB_PORT" -u "$DB_USER" -p$DB_PASSWORD --databases $DB_NAME | gzip >> "$DUMP_PATH"
             fi
             ;;
         mariadb)
             if [ -z "$DB_NAME" ]; then
                 echo "Dumping all MariaDB databases..."
-                mariadb-dump -h "$DB_HOST" -P "$DB_PORT" -u "$DB_USER" -p"$DB_PASSWORD" --all-databases | gzip > "$DUMP_PATH"
+                mariadb-dump -h "$DB_HOST" -P "$DB_PORT" -u "$DB_USER" -p$DB_PASSWORD --all-databases | gzip > "$DUMP_PATH"
             else
                 echo "Dumping selected MariaDB databases: $DB_NAME"
-                IFS=',' read -r DBS <<< "$DB_NAME"
-                for db in $DBS; do
-                    mariadb-dump -h "$DB_HOST" -P "$DB_PORT" -u "$DB_USER" -p"$DB_PASSWORD" "$db" | gzip >> "$DUMP_PATH"
-                done
+                mariadb-dump -h "$DB_HOST" -P "$DB_PORT" -u "$DB_USER" -p$DB_PASSWORD --databases $DB_NAME | gzip >> "$DUMP_PATH"
             fi
             ;;
         postgresql)
@@ -39,10 +48,7 @@ dump_databases() {
                 pg_dumpall -h "$DB_HOST" -p "$DB_PORT" -U "$PG_USER" | gzip > "$DUMP_PATH"
             else
                 echo "Dumping selected PostgreSQL databases: $DB_NAME"
-                IFS=',' read -r DBS <<< "$DB_NAME"
-                for db in $DBS; do
-                    pg_dump -h "$DB_HOST" -p "$DB_PORT" -U "$PG_USER" "$db" | gzip >> "$DUMP_PATH"
-                done
+                pg_dump -h "$DB_HOST" -p "$DB_PORT" -U "$PG_USER" -d "$DB_NAME" | gzip >> "$DUMP_PATH"
             fi
             ;;
         *)
