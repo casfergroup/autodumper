@@ -12,7 +12,6 @@ ENV DUMP_PREFIX=""
 
 # Install dependencies
 RUN apk update && \
-    apk upgrade --available && \
     apk add --no-cache \
         ca-certificates \
         mariadb-client \
