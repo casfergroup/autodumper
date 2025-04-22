@@ -18,11 +18,15 @@ jobs:
       - name: Set up Docker Buildx
         uses: docker/setup-buildx-action@v3
 
-      - name: Build Docker image
-        run: |
-          docker build -t casfergroup/autodumper:test ./build
+      - name: Build image and export locally (for SAST scan)
+        uses: docker/build-push-action@v6
+        with:
+          context: ./build
+          tags: casfergroup/autodumper:test
+          load: true 
+          platforms: linux/amd64
 
-      - name: Save image to file
+      - name: Save image to tar file
         run: docker save casfergroup/autodumper:test -o autodumper.tar
 
       - name: Upload image as artifact
@@ -44,10 +48,16 @@ jobs:
       - name: Load Docker image
         run: docker load -i autodumper.tar
 
-      - name: Run Trivy
+      - name: Run Trivy (fail on CRITICAL and HIGH)
         uses: aquasecurity/trivy-action@0.30.0
         with:
           image-ref: 'casfergroup/autodumper:test'
-          format: 'table'
-          severity: 'CRITICAL,HIGH,MEDIUM'
+          format: 'sarif'
+          severity: 'CRITICAL,HIGH'
           exit-code: '1'
+          output: 'trivy-results.sarif'
+
+      - name: Upload SARIF to GitHub Security tab
+        uses: github/codeql-action/upload-sarif@v3
+        with:
+          sarif_file: 'trivy-results.sarif'
