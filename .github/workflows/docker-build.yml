@@ -1,7 +1,8 @@
 name: Build and Push Docker Image
 permissions:
   contents: read
-  
+  security-events: write  
+
 on:
   push:
     branches:
@@ -39,10 +40,35 @@ jobs:
         call: check
         context: ./build
 
-    - name: Build and push
+    - name: Build image locally (do not push yet)
+      uses: docker/build-push-action@v6
+      with:
+        context: ./build
+        platforms: linux/amd64
+        push: false
+        load: true
+        tags: casfergroup/autodumper:latest
+
+    - name: Run Trivy scan and generate SARIF (fail only on CRITICAL)
+      uses: aquasecurity/trivy-action@0.30.0
+      with:
+        image-ref: 'casfergroup/autodumper:latest'
+        format: 'sarif'
+        severity: 'CRITICAL'
+        exit-code: '1'
+        output: 'trivy-results.sarif'
+
+    - name: Upload Trivy SARIF to GitHub Security tab
+      uses: github/codeql-action/upload-sarif@v3
+      with:
+        sarif_file: 'trivy-results.sarif'
+
+    - name: Build and push multi-arch image
+      if: success()
       uses: docker/build-push-action@v6
       with:
         context: ./build
         platforms: linux/amd64,linux/arm64
         push: true
         tags: casfergroup/autodumper:latest
+
