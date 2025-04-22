@@ -51,8 +51,7 @@ jobs:
       - name: Run Trivy (fail on CRITICAL and HIGH)
         uses: aquasecurity/trivy-action@0.30.0
         with:
-          image-ref: 'casfergroup/autodumper:test'
-          format: 'sarif'
-          severity: 'CRITICAL,HIGH'
-          exit-code: '1'
-          output: 'table'
+              image-ref: 'casfergroup/autodumper:test'
+              format: 'table'
+              severity: 'CRITICAL,HIGH'
+              exit-code: '1'
