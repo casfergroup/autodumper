@@ -1,4 +1,4 @@
-FROM alpine:3.21.0
+FROM alpine:3.18.1
 
 ENV DB_HOST="db"
 ENV DB_PORT="3306"
