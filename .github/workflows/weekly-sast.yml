@@ -22,4 +22,4 @@ jobs:
       - name: Upload rebuild Trivy SARIF to GitHub Security tab
         uses: github/codeql-action/upload-sarif@v3
         with:
-          sarif_file: 'trivy-results-rebuild.sarif'
+          sarif_file: 'trivy-results.sarif'
