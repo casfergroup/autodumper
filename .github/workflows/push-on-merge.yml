@@ -1,9 +1,10 @@
-name: Push to Docker Hub on merge
+name: Push to Docker Hub
 permissions:
   contents: read
   security-events: write
 
 on:
+  workflow_dispatch
   push:
     branches:
       - main
