@@ -29,7 +29,7 @@ jobs:
       - name: Build image and export locally (for SAST scan)
         uses: docker/build-push-action@v6
         with:
-          file: ${{ matrix.image_type }}/Dockerfile
+          context: ./build
           tags: autodumper:test
           load: true
           platforms: linux/amd64
