@@ -30,17 +30,17 @@ jobs:
         uses: docker/build-push-action@v6
         with:
           context: ./build
-          tags: autodumper:test
+          tags: autodumper-test
           load: true
           platforms: linux/amd64
 
       - name: Save image to tar file
-        run: docker save autodumper:test -o image.tar
+        run: docker save autodumper-test -o image.tar
 
       - name: Upload image as artifact
         uses: actions/upload-artifact@v4
         with:
-          name: autodumper:test
+          name: autodumper-test
           path: image.tar
   sast:
     runs-on: ubuntu-latest
@@ -56,7 +56,7 @@ jobs:
       - name: Download Docker image artifact
         uses: actions/download-artifact@v4
         with:
-          name: autodumper:test
+          name: autodumper-test
 
       - name: Load Docker image
         run: docker load -i image.tar
@@ -64,7 +64,7 @@ jobs:
       - name: Run Trivy
         uses: aquasecurity/trivy-action@0.31.0
         with:
-          image-ref: 'autodumper:test'
+          image-ref: 'autodumper-test'
           format: 'sarif'
           exit-code: '0' # Won't fail on vulns found
           ignore-unfixed: true # Won't flag if there isn't a fix to the CVE
@@ -109,8 +109,8 @@ jobs:
       - name: Log in to Dockerhub
         uses: docker/login-action@v3
         with:
-          username: ${{ env.DOCKERHUB_USERNAME }}
-          password: ${{ secrets.DOCKERHUB_TOKEN }}
+          username: ${{ secrets.DOCKER_USERNAME }}
+          password: ${{ secrets.DOCKER_PASSWORD }}
 
       - name: Build and Push Docker image
         uses: docker/build-push-action@v5
