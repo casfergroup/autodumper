@@ -1,4 +1,4 @@
-#!/bin/sh
+#!/bin/bash
 
 # === File Permssions ==
 umask 077

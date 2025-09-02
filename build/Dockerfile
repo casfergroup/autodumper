@@ -18,6 +18,7 @@ RUN apk update && \
         mariadb-client \
         postgresql-client \
         gzip \
+        bash \
         rclone
 
 WORKDIR /data
