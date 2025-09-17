@@ -15,8 +15,8 @@ services:
     environment:
       DB_HOST: mariadb
       DB_PORT: "3306"
-      DB_USER: root
-      DB_PASSWORD: rootpass
+      DB_USER: testuser
+      DB_PASSWORD: testpass
       DB_NAME: ""
       DB_TYPE: mariadb
       S3_REMOTE: your_remote
@@ -24,3 +24,4 @@ services:
       DUMP_PREFIX: "all_db"
     volumes:
       - ~/.config/rclone/rclone.conf:/root/.config/rclone/rclone.conf:ro
+      - ~/agekey.pub:/data/key.pub:ro

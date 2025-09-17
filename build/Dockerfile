@@ -14,11 +14,12 @@ ENV DUMP_PREFIX=""
 RUN apk update && \
     apk upgrade --available && \
     apk add --no-cache \
+        age \
+        bash \    
         ca-certificates \
+        gzip \
         mariadb-client \
         postgresql-client \
-        gzip \
-        bash \
         rclone
 
 WORKDIR /data
