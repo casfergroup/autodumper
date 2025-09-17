@@ -14,14 +14,14 @@ for var in $required_vars; do
 done
 
 # === Internal variables ===
-local date_str=$(date +"%Y-%m-%d_%H-%M-%S")
-local filename
+date_str=$(date +"%Y-%m-%d_%H-%M-%S")
+filename=""
 if [ -n "$DB_NAME" ]; then
-    filename="${DUMP_PREFIX}_${DB_NAME}_${date_str}.sql.gz"
+    filename="${DUMP_PREFIX}_${DB_NAME}_${date_str}.adump"
 else
-    filename="${DUMP_PREFIX}_${date_str}.sql.gz"
+    filename="${DUMP_PREFIX}_${date_str}.adump"
 fi
-local dump_path="/data/${filename}"
+dump_path="/data/${filename}"
 
 # === Function to process the dump ===
 process_dump_stream() {
@@ -30,10 +30,10 @@ process_dump_stream() {
 
   if [ -f "$key_file" ]; then
     echo "Key found at $key_file. Compressing and encrypting stream..." >&2
-    gzip | age -e -R "$key_file" > "${output_path}.age"
+    gzip | age -e -R "$key_file" > "${output_path}"
   else
     echo "Key not found. Compressing stream only..." >&2
-    gzip > "${output_path}.sql.gz"
+    gzip > "${output_path}"
   fi
 }
 
