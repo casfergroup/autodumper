@@ -8,7 +8,7 @@ Autodumper is a docker image that backups databases and sends the data to a remo
 - MariaDB
 - Postgres
 
-### Backup Encryption
+## Backup Encryption
 
 Encryption is optional but highly recommended for securing your backups. This image uses **[age](https://github.com/FiloSottile/age)** for simple and secure public-key encryption.
 
@@ -17,11 +17,11 @@ Encryption is optional but highly recommended for securing your backups. This im
   * **With Encryption**: If `/data/key.pub` exists, backups are automatically compressed and encrypted.
   * **Without Encryption**: If no key file is found, backups are only compressed with gzip.
 
-### How to Restore
+## How to Restore
 
 You can easily restore your backup using standard command-line tools.
 
-#### Restoring an Encrypted Backup
+### Restoring an Encrypted Backup
 
 You'll need your `age` private key to decrypt the file. The command below decrypts the backup and then uncompresses it.
 
@@ -30,7 +30,7 @@ You'll need your `age` private key to decrypt the file. The command below decryp
 age -d -i /path/to/your/private.key backup.adump | gunzip > original_dump.sql
 ```
 
-#### **Restoring an Unencrypted Backup (.sql.gz)**
+### **Restoring an Unencrypted Backup (.sql.gz)**
 
 For unencrypted backups, you only need to uncompress the file using `gunzip`.
 
@@ -63,10 +63,10 @@ docker run --rm \
 
 ```
 
-### Docker compose
+## Docker compose
 
 See examples on [examples/](examples/).
 
-### Periodic backups
+## Periodic backups
 
-If you want to schedule periodic backups, create a cron on the host. Currently the image doesn't support cron by itself
+If you want to schedule periodic backups, create a cron on the host. Currently the image doesn't support cron by itself.
