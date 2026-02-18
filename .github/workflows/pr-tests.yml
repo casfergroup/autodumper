@@ -51,7 +51,7 @@ jobs:
         run: docker load -i autodumper.tar
 
       - name: Run Trivy
-        uses: aquasecurity/trivy-action@0.31.0
+        uses: aquasecurity/trivy-action@0.34.0
         with:
               image-ref: 'casfergroup/autodumper:test'
               format: 'table'
